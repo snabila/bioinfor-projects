@@ -15,11 +15,18 @@ def trial(filename):
     header = file.readline()
     
     for line in file:
-        for char in line:
-            if char == 'A' : a_count += 1
-            if char == 'C' : c_count += 1
-            if char == 'T' : t_count += 1
-            if char == 'G' : g_count += 1
+        # for char in line:
+        #     if char == 'A' : a_count += 1
+        #     if char == 'C' : c_count += 1
+        #     if char == 'T' : t_count += 1
+        #     if char == 'G' : g_count += 1
+
+        line = line.strip().upper()
+        a_count += line.count("A")
+        c_count += line.count("C")
+        t_count += line.count("T")
+        g_count += line.count("G")
+
     print(f"A: {a_count}, T: {t_count}, C: {c_count}, G: {g_count}\n")
     
 
