@@ -27,12 +27,15 @@ def trial(filename):
         t_count += line.count("T")
         g_count += line.count("G")
 
-    print(f"A: {a_count}, T: {t_count}, C: {c_count}, G: {g_count}\n")
+    print(f"A: {a_count}, T: {t_count}, C: {c_count}, G: {g_count}")
+
+    gc_content = (g_count + c_count) / (a_count + c_count + t_count + g_count) * 100
+    print(f"GC Content: {gc_content}")
     
 
 
 def main():
-    filename = "JN587815.1.fasta"
+    filename = "../resources/JN587815.1.fasta"
     print("Running...")
     print("=== WITH PACKAGE ===")
     withPackage(filename)
