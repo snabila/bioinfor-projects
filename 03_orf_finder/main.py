@@ -1,9 +1,9 @@
 import re
 from Bio import SeqIO
 
-def trial(filename, start_pattern, stop_pattern):
+def trial(filename, start_pattern):
     file = open(filename)
-    header = file.readline()
+    file.readline()
     sequence = ""
     start_index = 0
 
@@ -12,38 +12,36 @@ def trial(filename, start_pattern, stop_pattern):
         sequence += line
 
     while (start_index <= len(sequence)):
-        # start = sequence.find(start_index, pattern)
-
         start_match = re.search(start_pattern, sequence[start_index:])
         if not start_match:
             print("No more start codon found")
             break
         start_index += start_match.start()
 
-        stop_match = re.search(stop_pattern, sequence[start_index + 3:])
-        if not stop_match:
+        stop_index = start_index + 6 # ignoring any stop codon immediately after the start codon
+        stop_text = ''
+        while (stop_index <= len(sequence)):
+            if sequence[stop_index:stop_index+3] in ("TAA", "TAG", "TGA"): 
+                stop_text = sequence[stop_index:stop_index+3]
+                break
+            stop_index += 3
+
+        if stop_text == '':
             print("No more stop codon found")
             break
-        stop_index = stop_match.end()
 
-        pattern = sequence[start_index:stop_index + 2]
+        pattern = sequence[start_index:stop_index + 3]
         print(pattern, start_index, stop_index)
 
-        start_index = stop_index + 2
+        start_index = stop_index + 4
 
 def main():
     filename = "resources/JN587815.1.fasta"
-    pattern1 = r"ATG[ATGC]{3,}"
     pattern2 = r"ATG"
-    pattern3 = r"(?:[ATGC]{3})+(?:TAA|TAG|TGA)"
-
 
     print("Running...")
-    # print("=== WITH PACKAGE ===")
-    # withPackage(filename, pattern1)
     print("=== TRIAL ===")
-    trial(filename, pattern2, pattern3)
-    # trial(filename, pattern1)
+    trial(filename, pattern2)
 
 if __name__ == "__main__":
     main()
